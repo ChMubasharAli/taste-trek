@@ -11,7 +11,7 @@ export default function FoodDisplay({ category }) {
 
   useEffect(() => {
     const fetchData = async () => {
-      await request("/api/foodList");
+      await request(`{${import.meta.env.VITE_API_URL}/api/foodList`);
     };
 
     fetchData();

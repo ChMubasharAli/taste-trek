@@ -52,7 +52,10 @@ export default function AuthPopup() {
 
     try {
       setLoading(true);
-      const response = await axios.post("/api/login", formData);
+      const response = await axios.post(
+        `{${import.meta.env.VITE_API_URL}/api/login`,
+        formData
+      );
       if (response.data.success) {
         notifications.show({
           title: "Login success",
@@ -145,7 +148,10 @@ export default function AuthPopup() {
 
     try {
       setLoading(true);
-      const response = await axios.post("/api/signup", formData);
+      const response = await axios.post(
+        `{${import.meta.env.VITE_API_URL}/api/signup`,
+        formData
+      );
       if (response.data.success) {
         notifications.show({
           title: "Signup success",

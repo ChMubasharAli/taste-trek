@@ -67,7 +67,10 @@ const CheckoutComponent = () => {
     // place order
     try {
       setLoading(true);
-      const response = await axios.post("/api/orderPlacement", payload);
+      const response = await axios.post(
+        `{${import.meta.env.VITE_API_URL}/api/orderPlacement`,
+        payload
+      );
 
       if (response) {
         notifications.show({
