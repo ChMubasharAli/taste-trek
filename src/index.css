@@ -1,0 +1,61 @@
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap");
+
+@import "tailwindcss";
+
+* {
+  font-family: "Outfit", sans-serif !important;
+}
+
+body {
+  min-height: 100dvh;
+  background-color: #fcfefe;
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background-color: #0a1c2a;
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+  background-color: #0a1c2a;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: #37B24D;
+}
+
+/* Scroll corner style (Optional) */
+.corner {
+  background-color: light-dark(
+    var(--mantine-color-gray-0),
+    var(--mantine-color-dark-6)
+  );
+  opacity: 1;
+}
+
+@theme {
+  /* #f2f2f2 */
+  --color-bgPrimary: #fcfefe;
+  --color-primaryColor: #40C057;
+  --color-secondaryColor: #FFFFFF;
+  --color-tertiaryColor: #dee2e6;
+
+  /* Breakpoints (customized for different devices) */
+  --breakpoint-xs: 20rem; /* Small mobile devices, or very narrow screens (320px) */
+  --breakpoint-sm: 40rem; /* Small screens (like mobile portrait mode, 640px) */
+  --breakpoint-md: 48rem; /* Tablets (like portrait tablet, 768px) */
+  --breakpoint-lg: 64rem; /* Laptops and medium-sized screens (1024px) */
+  --breakpoint-xl: 80rem; /* Larger desktops (1280px) */
+  --breakpoint-2xl: 96rem; /* Very large screens (1536px) */
+  --breakpoint-3xl: 122rem; /* Extra-large screens, such as ultra-wide monitors */
+}
+
+.borderShadow {
+  box-shadow: 0_0_10px_0_#00d5be;
+}
+
+
+
+
