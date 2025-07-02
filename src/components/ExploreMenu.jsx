@@ -18,7 +18,7 @@ export default function ExploreMenu({ category, setCategory }) {
 
   useEffect(() => {
     const fetchData = async () => {
-      await request(`{${import.meta.env.VITE_API_URL}/api/categories`);
+      await request(`${import.meta.env.VITE_API_URL}/api/categories`);
     };
 
     fetchData();

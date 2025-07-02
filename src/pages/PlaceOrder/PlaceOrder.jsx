@@ -68,7 +68,7 @@ const CheckoutComponent = () => {
     try {
       setLoading(true);
       const response = await axios.post(
-        `{${import.meta.env.VITE_API_URL}/api/orderPlacement`,
+        `${import.meta.env.VITE_API_URL}/api/orderPlacement`,
         payload
       );
 
