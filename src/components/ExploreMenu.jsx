@@ -90,7 +90,7 @@ export default function ExploreMenu({ category, setCategory }) {
               </Avatar>
             }
             classNames={{
-              root: ` hover:!scale-105 !transition-all !duration-300 !cursor-pointer !min-w-44  ${
+              root: ` hover:!scale-101 !transition-all !duration-300 !cursor-pointer !min-w-44  ${
                 category === "All" ? "border-5 border-primaryColor " : ""
               }  `,
             }}
