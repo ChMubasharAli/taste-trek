@@ -65,7 +65,7 @@ export default function PaymentComp() {
             message: "Your order has beed placed successfully",
             position: "top-right",
             autoClose: 4000,
-            color: "green", // Yellow for warning
+            color: "green", //Yellow color used for warning sign
             withBorder: true,
             radius: "md",
           });
@@ -83,7 +83,7 @@ export default function PaymentComp() {
             message: "Your order has beed placed successfully",
             position: "top-right",
             autoClose: 4000,
-            color: "green", // Yellow for warning
+            color: "green", // Yellow color used for warning sign
             withBorder: true,
             radius: "md",
           });
