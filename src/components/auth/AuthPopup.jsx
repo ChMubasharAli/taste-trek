@@ -237,7 +237,7 @@ export default function AuthPopup() {
         </Modal.Header>
 
         <Modal.Body classNames={{ body: "!flex !flex-col !gap-4" }}>
-          {/* {JSON.stringify(data, null, 2)} */}
+          
           {/* -----------------Input for Name------------------  */}
           {currentState !== "login" && (
             <Input.Wrapper

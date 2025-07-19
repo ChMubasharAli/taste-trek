@@ -16,7 +16,7 @@ export default function ExploreMenu({ category, setCategory }) {
   }, []);
   return (
     <section id="exploreMenu" className="container mx-auto lg:pt-24 py-10 ">
-      {/* {JSON.stringify(data?.data, null, 2)} */}
+      
       <Title
         data-aos="fade-up"
         ta={"center"}

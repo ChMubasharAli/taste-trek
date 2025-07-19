@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import { Wallet, CreditCard } from "lucide-react";
 import { Button } from "@mantine/core";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { StoreContext } from "../context/StoreContext";
 import axios from "axios";
 import { notifications } from "@mantine/notifications";
@@ -9,8 +9,6 @@ import { notifications } from "@mantine/notifications";
 export default function PaymentComp() {
   const [selectedMethod, setSelectedMethod] = useState(null);
   const [loading, setLoading] = useState(null);
-
-  const navigate = useNavigate();
 
   const location = useLocation();
   const {
@@ -110,7 +108,6 @@ export default function PaymentComp() {
         </h1>
         <div className="w-20 h-1 bg-gradient-to-r from-green-500 to-green-600 rounded-full mb-4"></div>
       </div>
-      {JSON.stringify(pickupPayload, null, 2)}
 
       <div className=" max-w-3xl mx-auto">
         {/* Payment Cards */}

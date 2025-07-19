@@ -60,7 +60,6 @@ const CheckoutComponent = () => {
 
   return (
     <main className="py-32">
-      {JSON.stringify(additionalDetail, null, 2)}
       <section className="container mx-auto py-32 flex flex-col  lg:flex-row justify-between gap-8 lg:gap-12">
         {/* Left Section - Delivery Information */}
 

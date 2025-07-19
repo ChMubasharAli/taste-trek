@@ -104,9 +104,6 @@ const Cart = () => {
           </p>
         </div>
 
-        {/* {JSON.stringify(cartItems, null, 2)} */}
-        {/* {JSON.stringify(pickupInfo, null, 2)} */}
-
         <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
           {/* Cart Items */}
           <div className="flex-1 lg:flex-[2]">
