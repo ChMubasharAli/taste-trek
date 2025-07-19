@@ -25,7 +25,6 @@ const useApi = () => {
         response = await axios.delete(url);
       }
       if (response.data) {
-        console.log("Response is ", response.data);
         setData(response.data); // Set the data from the response
       }
     } catch (err) {

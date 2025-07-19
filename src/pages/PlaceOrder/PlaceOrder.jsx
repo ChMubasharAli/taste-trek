@@ -1,14 +1,15 @@
-import React, { useContext, useState } from "react";
-import { TextInput, Button, ScrollArea, Input } from "@mantine/core";
+import { useContext, useState } from "react";
+import { Button } from "@mantine/core";
 import { StoreContext } from "../../context/StoreContext";
-import { IconAt } from "@tabler/icons-react";
 import { notifications } from "@mantine/notifications";
-import axios from "axios";
+import { AtSign, FileText, MapPin, Phone } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const CheckoutComponent = () => {
-  const { userData, cartItems, totalItemAmmount, clearCart } =
-    useContext(StoreContext);
-  const [loading, setLoading] = useState(false);
+  const { totalItemAmmount } = useContext(StoreContext);
+
+  const navigate = useNavigate();
+
   //   state to store form data
   const [formData, setFormData] = useState({
     firstName: "",
@@ -20,33 +21,16 @@ const CheckoutComponent = () => {
     zipcode: "",
     country: "",
     phone: "",
+
+    deliveryMethod: "delivery",
   });
 
-  let payload = {
-    user: userData._id,
-    items: cartItems,
-    totalAmount: totalItemAmmount,
-    deliveryCharge: 5.0,
-    shippingAddress: {
-      street: formData.street,
-      city: formData.city,
-      state: formData.state,
-      zip: formData.zipcode,
-      country: formData.country,
-    },
-    userDetails: {
-      name: `${formData.firstName} ${formData.lastName}`,
-      phone: formData.phone,
-      email: formData.email,
-    },
-    deliveryMethod: "delivery", // Either "delivery" or "pickup"
-    paymentMethod: "online", // Payment method used by the user (e.g., "credit_card", "paypal")
-    orderStatus: "pending", // Order status (default is "pending")
-    paymentStatus: "unpaid", // Payment status (default is "unpaid")
-    deliveryStatus: "not delivered",
-  };
+  const [additionalDetail, setAdditionalDetail] = useState({
+    alternatePhone: "",
+    specialInstructions: "",
+  });
 
-  const placeOrder = async () => {
+  const proceedToPayment = () => {
     // Loop through formData to check for empty or spaces-only fields
     for (const field in formData) {
       if (!formData[field].trim() === "") {
@@ -62,250 +46,300 @@ const CheckoutComponent = () => {
         });
         return; // Exit early if any field is empty or contains only spaces
       }
+      navigate(
+        "/payment",
+        {
+          state: { formData, additionalDetail },
+        },
+        scrollTo(0, 0)
+      );
     }
 
     // place order
-    try {
-      setLoading(true);
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/orderPlacement`,
-        payload
-      );
-
-      if (response) {
-        notifications.show({
-          title: "Order Placed",
-          message: `Your order has been placed successfully.`,
-          position: "top-right",
-          autoClose: 4000,
-          color: "green", // Yellow for warning
-          withBorder: true,
-          radius: "md",
-        });
-
-        clearCart();
-      }
-    } catch (error) {
-      setLoading(false);
-      console.log("error message is ", error);
-    } finally {
-      setLoading(false);
-    }
   };
 
   return (
-    <>
-      <section className="container mx-auto py-24 flex flex-col lg:flex-row justify-between gap-6 ">
-        {/* ---------------Left Section----------------------  */}
-        <section className="grid grid-cols-1 gap-y-3 max-w-2xl w-full">
-          <h2 className="text-2xl font-bold  tracking-wider">
-            Delivery Information
-          </h2>
+    <main className="py-32">
+      {JSON.stringify(additionalDetail, null, 2)}
+      <section className="container mx-auto py-32 flex flex-col  lg:flex-row justify-between gap-8 lg:gap-12">
+        {/* Left Section - Delivery Information */}
 
-          {/* -----------------Inputs for Name------------------  */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-            <Input.Wrapper
-              withAsterisk
-              classNames={{ label: "!mb-1" }}
-              label="First Name: "
-            >
-              <Input
-                onChange={(event) =>
-                  setFormData({
-                    ...formData,
-                    firstName: event.currentTarget.value,
-                  })
-                }
-                radius={"md"}
-                size="md"
-                placeholder="First name"
-              />
-            </Input.Wrapper>
+        <section className="flex-1 max-w-2xl">
+          <div className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8 shadow-sm">
+            <div className="mb-8">
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
+                Delivery Information
+              </h2>
+              <div className="w-16 h-1 bg-gradient-to-r from-green-500 to-green-600 rounded-full"></div>
+            </div>
 
-            <Input.Wrapper
-              withAsterisk
-              classNames={{ label: "!mb-1" }}
-              label="Last Name: "
-            >
-              <Input
-                onChange={(event) =>
-                  setFormData({
-                    ...formData,
-                    lastName: event.currentTarget.value,
-                  })
-                }
-                radius={"md"}
-                size="md"
-                placeholder="Last name"
-              />
-            </Input.Wrapper>
+            <div className="space-y-6">
+              {/* Name Fields */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    First Name <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="First name"
+                    value={formData.firstName}
+                    onChange={(e) =>
+                      setFormData({ ...formData, firstName: e.target.value })
+                    }
+                    className="w-full p-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-none focus:ring-3 focus:ring-green-300 focus:border-green-500 transition-all duration-200 bg-gray-50 hover:bg-white"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Last Name <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Last name"
+                    value={formData.lastName}
+                    onChange={(e) =>
+                      setFormData({ ...formData, lastName: e.target.value })
+                    }
+                    className="w-full p-4 border-2 border-gray-200 rounded-xl focus:ring-3 focus:outline-none focus:border-none focus:ring-green-300 focus:border-green-500 transition-all duration-200 bg-gray-50 hover:bg-white"
+                  />
+                </div>
+              </div>
+
+              {/* Email Field */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Email Address <span className="text-red-500">*</span>
+                </label>
+                <div className="relative">
+                  <AtSign className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                  <input
+                    type="email"
+                    placeholder="Email address"
+                    value={formData.email}
+                    onChange={(e) =>
+                      setFormData({ ...formData, email: e.target.value })
+                    }
+                    className="w-full p-4 pl-12 border-2 border-gray-200 rounded-xl focus:ring-3 focus:outline-none focus:border-none focus:ring-green-300 focus:border-green-500 transition-all duration-200 bg-gray-50 hover:bg-white"
+                  />
+                </div>
+              </div>
+
+              {/* City & State */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    City <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="City"
+                    value={formData.city}
+                    onChange={(e) =>
+                      setFormData({ ...formData, city: e.target.value })
+                    }
+                    className="w-full p-4 border-2 border-gray-200 rounded-xl focus:ring-3 focus:outline-none focus:border-none focus:ring-green-300 focus:border-green-500 transition-all duration-200 bg-gray-50 hover:bg-white"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    State <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="State"
+                    value={formData.state}
+                    onChange={(e) =>
+                      setFormData({ ...formData, state: e.target.value })
+                    }
+                    className="w-full p-4 border-2 border-gray-200 rounded-xl focus:ring-3 focus:outline-none focus:border-none focus:ring-green-300 focus:border-green-500 transition-all duration-200 bg-gray-50 hover:bg-white"
+                  />
+                </div>
+              </div>
+
+              {/* Street Address */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Street Address <span className="text-red-500">*</span>
+                </label>
+                <div className="relative">
+                  <MapPin className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                  <input
+                    type="text"
+                    placeholder="Street address"
+                    value={formData.street}
+                    onChange={(e) =>
+                      setFormData({ ...formData, street: e.target.value })
+                    }
+                    className="w-full p-4 pl-12 border-2 border-gray-200 rounded-xl focus:ring-3 focus:outline-none focus:border-none focus:ring-green-300 focus:border-green-500 transition-all duration-200 bg-gray-50 hover:bg-white"
+                  />
+                </div>
+              </div>
+
+              {/* Zipcode & Country */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Zip Code <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Zip code"
+                    value={formData.zipcode}
+                    onChange={(e) =>
+                      setFormData({ ...formData, zipcode: e.target.value })
+                    }
+                    className="w-full p-4 border-2 border-gray-200 rounded-xl focus:ring-3 focus:outline-none focus:border-none focus:ring-green-300 focus:border-green-500 transition-all duration-200 bg-gray-50 hover:bg-white"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Country <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Country"
+                    value={formData.country}
+                    onChange={(e) =>
+                      setFormData({ ...formData, country: e.target.value })
+                    }
+                    className="w-full p-4 border-2 border-gray-200 rounded-xl focus:ring-3 focus:outline-none focus:border-none focus:ring-green-300 focus:border-green-500 transition-all duration-200 bg-gray-50 hover:bg-white"
+                  />
+                </div>
+              </div>
+
+              {/* Phone Number */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Phone Number <span className="text-red-500">*</span>
+                </label>
+                <div className="relative">
+                  <Phone className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                  <input
+                    type="tel"
+                    placeholder="Phone number"
+                    value={formData.phone}
+                    onChange={(e) =>
+                      setFormData({ ...formData, phone: e.target.value })
+                    }
+                    className="w-full p-4 pl-12 border-2 border-gray-200 rounded-xl focus:ring-3 focus:outline-none focus:border-none focus:ring-green-300 focus:border-green-500 transition-all duration-200 bg-gray-50 hover:bg-white"
+                  />
+                </div>
+              </div>
+            </div>
           </div>
-
-          {/* -----------------Input for Email------------------  */}
-          <Input.Wrapper
-            withAsterisk
-            classNames={{ label: "!mb-1" }}
-            label="Email "
-          >
-            <Input
-              onChange={(event) =>
-                setFormData({ ...formData, email: event.currentTarget.value })
-              }
-              radius={"md"}
-              size="md"
-              placeholder="Email address"
-              leftSection={<IconAt size={16} />}
-            />
-          </Input.Wrapper>
-
-          {/* -----------------Inputs for City & State------------------  */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ">
-            <Input.Wrapper
-              withAsterisk
-              classNames={{ label: "!mb-1" }}
-              label="City: "
-            >
-              <Input
-                onChange={(event) =>
-                  setFormData({
-                    ...formData,
-                    city: event.currentTarget.value,
-                  })
-                }
-                radius={"md"}
-                size="md"
-                placeholder="City"
-              />
-            </Input.Wrapper>
-
-            <Input.Wrapper
-              withAsterisk
-              classNames={{ label: "!mb-1" }}
-              label="State: "
-            >
-              <Input
-                onChange={(event) =>
-                  setFormData({
-                    ...formData,
-                    state: event.currentTarget.value,
-                  })
-                }
-                radius={"md"}
-                size="md"
-                placeholder="State"
-              />
-            </Input.Wrapper>
-          </div>
-
-          {/* -----------------Input for Street------------------  */}
-
-          <Input.Wrapper
-            withAsterisk
-            classNames={{ label: "!mb-1" }}
-            label="Street "
-          >
-            <Input
-              onChange={(event) =>
-                setFormData({ ...formData, street: event.currentTarget.value })
-              }
-              radius={"md"}
-              size="md"
-              placeholder="Street"
-            />
-          </Input.Wrapper>
-
-          {/* -----------------Inputs for Zipcode & Country------------------  */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 m">
-            <Input.Wrapper
-              withAsterisk
-              classNames={{ label: "!mb-1" }}
-              label="Zip code "
-            >
-              <Input
-                onChange={(event) =>
-                  setFormData({
-                    ...formData,
-                    zipcode: event.currentTarget.value,
-                  })
-                }
-                radius={"md"}
-                size="md"
-                placeholder="Zipcode"
-              />
-            </Input.Wrapper>
-
-            <Input.Wrapper
-              withAsterisk
-              classNames={{ label: "!mb-1" }}
-              label="Country "
-            >
-              <Input
-                onChange={(event) =>
-                  setFormData({
-                    ...formData,
-                    country: event.currentTarget.value,
-                  })
-                }
-                radius={"md"}
-                size="md"
-                placeholder="Country"
-              />
-            </Input.Wrapper>
-          </div>
-
-          {/* -----------------Input for Phone------------------  */}
-
-          <Input.Wrapper
-            withAsterisk
-            classNames={{ label: "!mb-1" }}
-            label="Phone : "
-          >
-            <Input
-              onChange={(event) =>
-                setFormData({ ...formData, phone: event.currentTarget.value })
-              }
-              radius={"md"}
-              size="md"
-              placeholder="Phone"
-            />
-          </Input.Wrapper>
         </section>
 
-        {/* ---------------Right Section----------------------  */}
+        {/* Right Section - Additional Info & Order Summary */}
+        <section className="w-full lg:w-96 lg:flex-shrink-0 space-y-6">
+          {/* Additional Information */}
+          <div className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">
+            <h3 className="text-lg font-bold text-gray-900 mb-4">
+              Additional Information
+            </h3>
 
-        <section className=" flex  max-w-lg w-full justify-between ">
-          <div className=" w-full">
-            <h2 className="text-xl font-bold">Cart Totals</h2>
-            <div className="flex justify-between  my-4 border-b py-1">
-              <span className="mr-2">Subtotal</span>
-              <span>${totalItemAmmount}</span>
+            <div className="space-y-4">
+              {/* Special Instructions */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Special Instructions{" "}
+                  <span className="text-gray-400">(Optional)</span>
+                </label>
+                <div className="relative">
+                  <FileText className="absolute left-4 top-4 text-gray-400 w-5 h-5" />
+                  <textarea
+                    placeholder="Any special delivery instructions..."
+                    value={additionalDetail.specialInstructions}
+                    onChange={(e) =>
+                      setAdditionalDetail({
+                        ...additionalDetail,
+                        specialInstructions: e.target.value,
+                      })
+                    }
+                    rows={3}
+                    className="w-full p-4 pl-12 border-2 border-gray-200 rounded-xl focus:ring-3 focus:outline-none focus:border-none focus:ring-green-300 focus:border-green-500 transition-all duration-200 bg-gray-50 hover:bg-white resize-none"
+                  />
+                </div>
+              </div>
+
+              {/* Alternate Phone */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Alternate Phone{" "}
+                  <span className="text-gray-400">(Optional)</span>
+                </label>
+                <div className="relative">
+                  <Phone className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                  <input
+                    type="tel"
+                    placeholder="Alternate phone number"
+                    value={additionalDetail.alternatePhone}
+                    onChange={(e) =>
+                      setAdditionalDetail({
+                        ...additionalDetail,
+                        alternatePhone: e.target.value,
+                      })
+                    }
+                    className="w-full p-4 pl-12 border-2 border-gray-200 rounded-xl focus:ring-3 focus:outline-none focus:border-none focus:ring-green-300 focus:border-green-500 transition-all duration-200 bg-gray-50 hover:bg-white"
+                  />
+                </div>
+              </div>
             </div>
-            <div className="flex justify-between  my-4 border-b py-1">
-              <span className="mr-2">Delivery Fee</span>
-              <span>$5</span>
+          </div>
+
+          {/* Order Summary */}
+          <div className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">
+            <h3 className="text-xl font-bold text-gray-900 mb-6">
+              Order Summary
+            </h3>
+
+            <div className="space-y-4 mb-6">
+              <div className="flex justify-between items-center py-3 border-b border-gray-100">
+                <span className="text-gray-600">Subtotal</span>
+                <span className="font-semibold text-gray-900">
+                  Rs {totalItemAmmount}
+                </span>
+              </div>
+
+              <div className="flex justify-between items-center py-3 border-b border-gray-100">
+                <span className="text-gray-600">Delivery Fee</span>
+                <span className="font-semibold text-gray-900">Rs 5</span>
+              </div>
+
+              {/* <div className="flex justify-between items-center py-3 border-b border-gray-100">
+                <span className="text-gray-600">Tax (5%)</span>
+                <span className="font-semibold text-gray-900">
+                  Rs {Math.round(totalItemAmmount * 0.05)}
+                </span>
+              </div> */}
+
+              <div className="flex justify-between items-center py-4 border-t-2 border-green-200">
+                <span className="text-xl font-bold text-gray-900">
+                  Total Amount
+                </span>
+                <span className="text-2xl font-bold text-green-600">
+                  Rs {totalItemAmmount + 5}
+                </span>
+              </div>
             </div>
-            <div className="flex justify-between  my-4 border-b py-1">
-              <span className="mr-2">Ammount To Pay</span>
-              <span>${totalItemAmmount + 5}</span>
-            </div>
+
+            {/* Payment Button */}
             <Button
-              size="md"
-              loading={loading}
-              disabled={loading}
-              loaderProps={{ type: "dots" }}
-              my={"md"}
-              variant="filled"
-              color="#FF6347"
+              onClick={proceedToPayment}
+              size="lg"
+              px={"xl"}
               radius={"md"}
-              classNames={{ root: "!w-fit" }}
-              onClick={placeOrder}
+              variant="filled"
+              color="green"
+              c={"white"}
+              fullWidth
             >
-              Proceed To Payment
+              Proceed to Payment
             </Button>
           </div>
         </section>
       </section>
-    </>
+    </main>
   );
 };
 

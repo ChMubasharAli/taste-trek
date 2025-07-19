@@ -26,12 +26,14 @@ import PrivateRoute from "./components/ProtectedRoute.jsx";
 import NotFoundPage from "./components/NotFoundPage/NotFoundPage.jsx";
 import MyOrders from "./components/MyOrder.jsx";
 import SuccessPage from "./components/SuccessPage.jsx";
+import PaymentComp from "./components/PaymentComp.jsx";
+import FailurePage from "./components/FailurePage.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
       <Route index element={<Home />} />
-      <Route path="/cart" element={<PrivateRoute element={<Cart />} />} />
+      <Route path="/cart" element={<Cart />} />
       <Route
         path="/checkout"
         element={<PrivateRoute element={<CheckoutComponent />} />}
@@ -40,9 +42,14 @@ const router = createBrowserRouter(
         path="/myOrders"
         element={<PrivateRoute element={<MyOrders />} />}
       />
+      <Route
+        path="/payment"
+        element={<PrivateRoute element={<PaymentComp />} />}
+      />
       <Route path="/forgetPassword" element={<ForgetPassword />} />
       <Route path="/verifyOtp" element={<VerifyOtp />} />
-      <Route path="/successPage" element={<SuccessPage />} />
+      <Route path="/order-success" element={<SuccessPage />} />
+      <Route path="/order-failed" element={<FailurePage />} />
 
       <Route path="*" element={<NotFoundPage />} />
     </Route>

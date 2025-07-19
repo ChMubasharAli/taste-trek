@@ -1,10 +1,16 @@
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useCallback, useEffect, useState } from "react";
 import { food_list } from "../assets/assets";
 import { useDisclosure } from "@mantine/hooks";
 // Creating context with a default value of an empty array for food_list
 const StoreContext = createContext({
+  userLocation: null,
+  getAndStoreUserLocation: () => {},
   isLoggedIn: Boolean,
-  food_list: [],
+  package_list: [],
+  foodPackage: [],
+  loadingPackages: false,
+  errorPackages: null,
+  addOnsMenu: [],
   cartItems: [],
   userData: [],
   addToCart: () => {},
@@ -38,13 +44,71 @@ const StoreContextProvider = ({ children }) => {
     return savedUserData ? JSON.parse(savedUserData) : null; // Retrieve user data from localStorage
   });
 
+  // Load userLocation from localStorage if it exists
+  const [userLocation, setUserLocation] = useState(() => {
+    const savedLocation = localStorage.getItem("userLocation");
+    return savedLocation ? JSON.parse(savedLocation) : null;
+  });
+
+  // state to fetch the food package
+  const [foodPackage, setFoodPackage] = useState([]);
+  const [loadingPackages, setLoadingPackages] = useState(false);
+  const [errorPackages, setErrorPackages] = useState(null);
+
+  // state to fetch the addons menu
+  const [addOnsMenu, setAddOnsMenu] = useState([]);
+
   // find the total sum of the items ammount that user add to the cart
   const totalItemAmmount = cartItems.reduce((accumulator, currentItem) => {
-    return accumulator + currentItem.price * currentItem?.quantity;
+    return (
+      accumulator +
+      (currentItem.basePrice * currentItem?.quantity + currentItem.totalPrice)
+    );
   }, 0);
 
   // manine disclousre for open and close login and signup modal
   const [opened, { open, close }] = useDisclosure(false);
+
+  // Fetch food  packages function
+  const fetchPackages = useCallback(async () => {
+    setLoadingPackages(true);
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/getAllPackage`
+      );
+      if (!response.ok) throw new Error("Failed to fetch packages");
+      const data = await response.json();
+      setFoodPackage(data.packages);
+    } catch (error) {
+      setErrorPackages(error.message);
+    } finally {
+      setLoadingPackages(false);
+    }
+  }, []);
+
+  // Fetch packages on mount
+  useEffect(() => {
+    fetchPackages();
+  }, [fetchPackages]);
+
+  // Fetch Addons Menu function
+  const fetchAddOnsMenu = useCallback(async () => {
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/getItemAddOn`
+      );
+      if (!response.ok) throw new Error("Failed to fetch packages");
+      const data = await response.json();
+      setAddOnsMenu(data.data);
+    } catch (error) {
+      console.log("Error while fetching the AddOnsMenu ", error);
+    }
+  }, []);
+
+  // Fetch packages on mount
+  useEffect(() => {
+    fetchAddOnsMenu();
+  }, [fetchAddOnsMenu]);
 
   // Function to log the user in
   const login = (token, user) => {
@@ -98,6 +162,28 @@ const StoreContextProvider = ({ children }) => {
     });
   };
 
+  // Function to get location using Geolocation API and store it
+  const getAndStoreUserLocation = () => {
+    if (!navigator.geolocation) {
+      console.warn("Geolocation not supported");
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const location = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        };
+        setUserLocation(location);
+        localStorage.setItem("userLocation", JSON.stringify(location));
+      },
+      (error) => {
+        console.warn("Location error:", error.message);
+      }
+    );
+  };
+
   // Function to remove a full item from the cart
   const removeFullItemFromCart = (item) => {
     setCartItems((prevState) => {
@@ -112,9 +198,15 @@ const StoreContextProvider = ({ children }) => {
   };
 
   const contextValue = {
+    userLocation,
+    getAndStoreUserLocation,
     isLoggedIn,
     userData,
     food_list,
+    foodPackage,
+    loadingPackages,
+    errorPackages,
+    addOnsMenu,
     cartItems,
     totalItemAmmount,
     setCartItems,

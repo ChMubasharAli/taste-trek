@@ -6,9 +6,7 @@ import flyingVegetablesTransparent from "../assets/flyingVegetablesTransparent.w
 import { useContext, useEffect } from "react";
 import { useState } from "react";
 import { notifications } from "@mantine/notifications";
-import { useLocation, useNavigate } from "react-router-dom";
 import { StoreContext } from "../context/StoreContext";
-import { useDisclosure } from "@mantine/hooks";
 import {
   IconHome,
   IconMail,
@@ -16,11 +14,10 @@ import {
   IconToolsKitchen3,
   IconTrendingUp,
 } from "@tabler/icons-react";
+import { useNavigate } from "react-router-dom";
 
 export default function Header() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-
-  const [opened, { close, toggle }] = useDisclosure();
 
   const {
     open: modalOpen,
@@ -89,296 +86,17 @@ export default function Header() {
     return () => clearInterval(interval);
   }, [foodImages.length]);
 
-  // --------------------Sroll Animation Starts from Here--------------
-
-  const { search } = useLocation();
-
-  // Check if there's a section in the query params
-  const queryParams = new URLSearchParams(search);
-  const sectionFromQuery = queryParams.get("section");
-
-  useEffect(() => {
-    if (sectionFromQuery) {
-      // When the component is mounted, scroll to the section based on the query param
-      const element = document.getElementById(sectionFromQuery);
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth" });
-      }
-    }
-  }, [sectionFromQuery]);
-
-  const handleNavigation = (section, navigate) => {
-    const { pathname } = window.location;
-
-    if (pathname === "/") {
-      // If already on the homepage, scroll directly
-      const element = document.getElementById(section);
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth" });
-      }
-    } else {
-      // If on a different page, navigate to home with section query
-      navigate(`/?section=${section}`);
-    }
-  };
-
-  // --------------------Sroll Animation Ends Here-------------------
-
   return (
-    <div className="min-h-[80vh]  bg-gradient-to-br from-gray-900 via-green-900 to-gray-900">
+    <div
+      id="headerSection"
+      className=" h-[80vh] lg:h-screen  bg-gradient-to-br from-gray-900 via-green-900 to-gray-900"
+    >
       {/* Navigation Header */}
-      <nav
-        data-aos="zoom-in-up"
-        data-aos-duration="700"
-        data-aos-delay="100"
-        className="   container mx-auto    h-[100px] flex items-center justify-between z-50"
-      >
-        {/* Logo Section  */}
-        <section className="z-50">
-          <h1
-            onClick={() => {
-              navigate("/");
-              scrollTo(0, 0);
-            }}
-            className="text-2xl cursor-pointer font-bold text-primaryColor"
-          >
-            <span className="font-extrabold text-4xl">T</span>aste{" "}
-            <span className="font-extrabold text-4xl">T</span>rek
-          </h1>
-        </section>
-        {/* This Navigation menu section will be visible on Large screens */}
-        <section className="hidden lg:block ">
-          <div className="flex gap-10">
-            {/* Home Section  */}
-            <div className="flex gap-2 items-center">
-              <h4
-                // onClick={() => handleNavigation("about")}
-                className="text-secondaryColor text-sm hover:text-primaryColor duration-300 cursor-pointer"
-              >
-                Home
-              </h4>
-            </div>
 
-            {/* Menu Section  */}
-            <div className="flex gap-2 items-center">
-              <h4
-                onClick={() => handleNavigation("exploreMenu", navigate)}
-                className="text-secondaryColor text-sm hover:text-primaryColor duration-300 cursor-pointer"
-              >
-                Menu
-              </h4>
-            </div>
-
-            {/* Contact Section  */}
-            <div className="flex gap-2 items-center">
-              <h4
-                // onClick={() => handleNavigation("contact")}
-                className="text-secondaryColor text-sm hover:text-primaryColor duration-300 cursor-pointer"
-              >
-                Contact Us
-              </h4>
-            </div>
-
-            {/* My Order Section   */}
-            {isLoggedIn && (
-              <div className="flex gap-2 items-center">
-                <h4
-                  onClick={() => navigate("/myOrders")}
-                  className="text-secondaryColor text-sm hover:text-primaryColor duration-300 cursor-pointer"
-                >
-                  My Order
-                </h4>
-              </div>
-            )}
-          </div>
-        </section>
-
-        {/* This Login and cart section will be visible on Large screens */}
-
-        <section className="hidden lg:flex items-center  gap-10">
-          <div>
-            {/* <IconShoppingCart stroke={2} /> */}
-            {cartItems.length > 0 && isLoggedIn ? (
-              <Indicator
-                processing
-                className="hover:!scale-110 cursor-pointer transition-all duration-300 "
-                color="green"
-                c={"dark"}
-                label={cartItems.length}
-                size={18}
-                radius={"lg"}
-              >
-                <Avatar
-                  onClick={() => {
-                    navigateToCart();
-                    scrollTo(0, 0);
-                  }}
-                  size="md"
-                  radius="xl"
-                  variant="transparent"
-                >
-                  {" "}
-                  <IconShoppingCart size={30} />
-                </Avatar>
-              </Indicator>
-            ) : (
-              <Avatar
-                onClick={navigateToCart}
-                size="md"
-                radius="xl"
-                variant="transparent"
-              >
-                <IconShoppingCart
-                  size={30}
-                  className="hover:!scale-110 cursor-pointer transition-all duration-300"
-                />
-              </Avatar>
-            )}
-          </div>
-
-          {/* Login and logout button section  */}
-          {isLoggedIn ? (
-            <Button
-              size="md"
-              px={"xl"}
-              radius={"md"}
-              variant="outline"
-              color="green"
-              c={"white"}
-              onClick={handleLogout}
-            >
-              Logout
-            </Button>
-          ) : (
-            <Button
-              size="md"
-              px={"xl"}
-              radius={"md"}
-              variant="outline"
-              color="green"
-              c={"white"}
-              onClick={modalOpen}
-            >
-              Login
-            </Button>
-          )}
-        </section>
-
-        {/* Burger menu - increased z-index */}
-
-        <section className="flex items-center gap-8 lg:hidden z-50">
-          <Burger
-            opened={opened}
-            onClick={toggle}
-            aria-label="Toggle navigation"
-            size="md"
-            lineSize={4}
-            color={opened ? "#222831" : "#fcfefe"}
-          />
-        </section>
-      </nav>
-
-      {/* Drawer with lower z-index */}
-      <Drawer.Root
-        opened={opened}
-        zIndex={40}
-        onClose={close}
-        size="xl"
-        position="right"
-      >
-        {/* <Drawer.Overlay /> */}
-        <Drawer.Content bg="#fcfefe">
-          <Drawer.Body className="flex mt-[100px] h-[70%] justify-evenly">
-            <div className="flex flex-col w-full ml-8 justify-evenly  text-2xl">
-              {/* Home Section  */}
-              <Button
-                variant="light"
-                color="green"
-                radius={"xl"}
-                classNames={{
-                  root: " hover:!scale-105 !transition-all !duration-300 !min-w-50 !mx-auto !cursor-pointer ",
-                }}
-                size={"md"}
-                leftSection={<IconHome stroke={2} color="green" size={20} />}
-              >
-                Home
-              </Button>
-
-              {/* Menu Section  */}
-              <Button
-                variant="light"
-                color="green"
-                radius={"xl"}
-                classNames={{
-                  root: " hover:!scale-105 !transition-all !duration-300 !min-w-50 !mx-auto !cursor-pointer ",
-                }}
-                size={"md"}
-                px={"xl"}
-                leftSection={
-                  <IconToolsKitchen3 stroke={2} color="green" size={20} />
-                }
-              >
-                Menu
-              </Button>
-
-              {/* About Section  */}
-              <Button
-                variant="light"
-                color="green"
-                radius={"xl"}
-                classNames={{
-                  root: " hover:!scale-105 !transition-all !duration-300 !min-w-50 !mx-auto !cursor-pointer ",
-                }}
-                size={"md"}
-                px={"xl"}
-                leftSection={<IconMail stroke={2} color="green" size={20} />}
-              >
-                Contact us
-              </Button>
-
-              {/* My Order  Section  */}
-              {isLoggedIn && (
-                <Button
-                  variant="light"
-                  color="green"
-                  radius={"xl"}
-                  classNames={{
-                    root: " hover:!scale-105 !transition-all !duration-300 !min-w-50 !mx-auto !cursor-pointer ",
-                  }}
-                  size={"md"}
-                  px={"xl"}
-                  leftSection={
-                    <IconTrendingUp stroke={2} color="green" size={20} />
-                  }
-                >
-                  My Order
-                </Button>
-              )}
-
-              {/* Cart Order Section  */}
-              <Button
-                variant="filled"
-                color="green"
-                radius={"xl"}
-                classNames={{
-                  root: " hover:!scale-105 !transition-all !duration-300 !min-w-50 !mx-auto !cursor-pointer ",
-                }}
-                size={"md"}
-                px={"xl"}
-                leftSection={
-                  <IconShoppingCart stroke={2} color="green" size={20} />
-                }
-              >
-                My Cart
-              </Button>
-            </div>
-          </Drawer.Body>
-        </Drawer.Content>
-      </Drawer.Root>
       {/* Hero Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-2  container mx-auto   py-12  lg:py-24 ">
+      <div className=" flex   h-full lg:grid lg:grid-cols-2  container mx-auto   lg:py-32 ">
         {/* Left Content */}
-        <div className=" flex items-center  h-full">
+        <div className=" flex items-center   h-full">
           <div className="flex-1 max-w-2xl">
             <p
               data-aos="fade-up"

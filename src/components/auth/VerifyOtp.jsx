@@ -44,7 +44,7 @@ export default function VerifyOtp() {
         login(response.data.token, response.data.data);
 
         // navigate to verify otp page
-        navigate("/", scrollTo(0, 0));
+        navigate(-1, scrollTo(0, 0));
       }
     } catch (error) {
       setLoading(false);
@@ -64,36 +64,39 @@ export default function VerifyOtp() {
 
   return (
     <section className="h-[70vh] flex flex-col items-center justify-center  ">
-      <div className="max-w-lg rounded-2xl p-4 shadow-md w-full flex flex-col gap-y-6 items-center">
-        {/* {JSON.stringify(otp, null, 2)} */}
-        <Title ta="center" order={2}>
-          Verify Your OTP
-        </Title>
+      <div className="bg-white max-w-xl w-full rounded-2xl border border-gray-200 p-6 sm:p-8 shadow-sm">
+        <div className="mb-8 flex flex-col items-center justify-center">
+          <h2 className="text-2xl sm:text-3xl text-center font-bold text-gray-900 mb-2">
+            Verify OTP
+          </h2>
+          <div className="w-16 h-1 bg-gradient-to-r from-green-500 to-green-600 rounded-full"></div>
+        </div>
 
-        {/* -----------------Input for OTP------------------  */}
-        <PinInput
-          classNames={{ input: "!border !border-2 !border-secondaryColor" }}
-          size="xl"
-          placeholder="-"
-          radius={"md"}
-          value={otp}
-          length={6}
-          onChange={setOtp} // Directly set otp state here
-        />
+        <div className="flex flex-col items-center justify-center gap-6 ">
+          {/* -----------------Input for OTP------------------  */}
+          <PinInput
+            size="xl"
+            placeholder="-"
+            radius={"md"}
+            value={otp}
+            length={6}
+            onChange={setOtp} // Directly set otp state here
+          />
 
-        <Button
-          onClick={handleVerifyOpt}
-          loading={loading}
-          disabled={loading}
-          loaderProps={{ type: "dots" }}
-          size="md"
-          variant="filled"
-          color="#FF6347"
-          radius={"md"}
-          fullWidth
-        >
-          Verify
-        </Button>
+          <Button
+            onClick={handleVerifyOpt}
+            loading={loading}
+            disabled={loading}
+            loaderProps={{ type: "dots" }}
+            size="md"
+            variant="filled"
+            color="green"
+            radius={"md"}
+            fullWidth
+          >
+            Verify
+          </Button>
+        </div>
       </div>
     </section>
   );

@@ -7,7 +7,6 @@ export default function WhyChooseSection() {
       title: "Lightning Fast",
       description:
         "Average delivery time of just 15 minutes. Your food arrives hot and fresh, exactly when you need it.",
-      stats: "15 min avg",
       color: "from-yellow-400 to-orange-500",
     },
     {
@@ -15,7 +14,6 @@ export default function WhyChooseSection() {
       title: "Premium Quality",
       description:
         "Partnered with top-rated restaurants and chefs to ensure every meal meets our high standards.",
-      stats: "5-star rated",
       color: "from-green-400 to-emerald-500",
     },
     {
@@ -23,7 +21,6 @@ export default function WhyChooseSection() {
       title: "Customer Love",
       description:
         "24/7 support and a satisfaction guarantee. We're not happy until you're completely satisfied.",
-      stats: "99% satisfied",
       color: "from-pink-400 to-rose-500",
     },
   ];
@@ -34,7 +31,7 @@ export default function WhyChooseSection() {
       <div className="absolute inset-0 bg-black/10"></div>
 
       {/* Animated background elements */}
-      <div className="absolute inset-0">
+      <div className="absolute inset-0 ">
         <div className="absolute top-10 left-10 w-72 h-72 bg-yellow-400/20 rounded-full blur-3xl animate-pulse"></div>
         <div className="absolute bottom-10 right-10 w-96 h-96 bg-pink-400/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-green-400/10 rounded-full blur-2xl animate-pulse delay-500"></div>
@@ -61,16 +58,16 @@ export default function WhyChooseSection() {
         <div className="text-center mb-20">
           <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-6 py-2 mb-6 border border-white/20">
             <Star className="w-4 h-4 text-yellow-400 fill-current" />
-            <span className="text-sm font-medium text-orange-100">
+            <span className="text-sm font-medium text-secondaryColor">
               Why Choose Us
             </span>
           </div>
 
-          <h2 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-white via-orange-100 to-white bg-clip-text text-transparent">
-            Why Choose FoodieExpress?
+          <h2 className="text-5xl md:text-6xl font-bold mb-6  text-secondaryColor">
+            Why Choose Taste Trek?
           </h2>
 
-          <p className="text-xl text-orange-100/90 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl text-tertiaryColor max-w-3xl mx-auto leading-relaxed">
             We're not just a food delivery service - we're your culinary
             adventure partner, bringing restaurant-quality meals to your
             doorstep with unmatched speed and care.
@@ -97,11 +94,6 @@ export default function WhyChooseSection() {
                         <IconComponent className="w-7 h-7 text-white" />
                       </div>
                     </div>
-
-                    {/* Stats badge */}
-                    <div className="absolute -top-2 -right-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-gray-900 text-xs font-bold px-2 py-1 rounded-full">
-                      {feature.stats}
-                    </div>
                   </div>
 
                   {/* Content */}
@@ -109,7 +101,7 @@ export default function WhyChooseSection() {
                     <h3 className="text-2xl font-bold mb-4 group-hover:text-orange-100 transition-colors duration-300">
                       {feature.title}
                     </h3>
-                    <p className="text-orange-100/80 leading-relaxed group-hover:text-orange-100 transition-colors duration-300">
+                    <p className="text-tertiaryColor leading-relaxed group-hover:text-orange-100 transition-colors duration-300">
                       {feature.description}
                     </p>
                   </div>

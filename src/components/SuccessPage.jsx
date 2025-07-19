@@ -19,8 +19,8 @@ function SuccessPage() {
         size="xl"
       >
         <div className="bg-white rounded-2xl shadow-lg w-full max-w-lg overflow-hidden">
-          <div className="bg-primaryColor text-center py-6">
-            <h1 className="text-2xl font-bold text-white">Thank You</h1>
+          <div className="bg-green-50 text-center py-6">
+            <h1 className="text-2xl font-bold text-black">Thank You</h1>
           </div>
 
           <div className="flex flex-col  items-center justify-center py-10">
@@ -56,8 +56,8 @@ function SuccessPage() {
             )}
           </div>
 
-          <div className="bg-primaryColor text-center py-6">
-            <p className="text-sm text-white">
+          <div className="bg-green-50 text-center py-6">
+            <p className="text-sm text-black">
               You have been successfully charged for this transaction.
             </p>
           </div>

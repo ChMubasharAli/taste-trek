@@ -17,6 +17,14 @@ export default function AuthPopup() {
 
   const [loading, setLoading] = useState(false);
 
+  //   state to store form data
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    acceptTerms: "",
+  });
+
   // const { data, error, loading, request } = useApi();
 
   const navigate = useNavigate();
@@ -68,8 +76,12 @@ export default function AuthPopup() {
         });
 
         login(response.data.token, response.data.data);
-        // navigate to Home page
-        navigate("/");
+        setFormData({
+          name: "",
+          email: "",
+          password: "",
+          acceptTerms: false,
+        });
         modalClose();
       }
     } catch (error) {
@@ -167,7 +179,18 @@ export default function AuthPopup() {
         });
 
         // navigate to verify otp page
-        navigate("/verifyOtp", { state: { email: response.data.data.email } });
+        setFormData({
+          name: "",
+          email: "",
+          password: "",
+          acceptTerms: false,
+        });
+        setCurrentState("login");
+        navigate(
+          "/verifyOtp",
+          { state: { email: response.data.data.email } },
+          scrollTo(0, 0)
+        );
         modalClose();
       }
     } catch (error) {
@@ -189,13 +212,6 @@ export default function AuthPopup() {
     // navigate("/verifyOtp", { state: { email: data.email } });
   };
 
-  //   state to store form data
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    acceptTerms: "",
-  });
   return (
     <Modal.Root
       opened={modalOpened}
@@ -294,7 +310,7 @@ export default function AuthPopup() {
               onClick={handleLogin}
               size="md"
               variant="filled"
-              color="#FF6347"
+              color="green"
               radius={"md"}
             >
               Login
@@ -304,7 +320,7 @@ export default function AuthPopup() {
               onClick={handleSignup}
               size="md"
               variant="filled"
-              color="#FF6347"
+              color="green"
               radius={"md"}
               loading={loading}
               disabled={loading}
