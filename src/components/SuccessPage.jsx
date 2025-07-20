@@ -2,16 +2,19 @@
 import { useContext, useState } from "react";
 import { BackgroundImage, Container, Loader, Overlay } from "@mantine/core";
 import { StoreContext } from "../context/StoreContext";
+import { useLocation } from "react-router-dom";
 
 function SuccessPage() {
-  //   const [searchParams] = useSearchParams();
-  //   const sessionId = searchParams.get(id);
-  //   const navigate = useNavigate();
+  const location = useLocation();
+
+  const queryParams = new URLSearchParams(location.search);
+
+  const session_id = queryParams.get("session_id");
   const [isSuccess] = useState(true);
   const { isLoggedIn } = useContext(StoreContext);
 
   return (
-    <main className="min-h-[70vh]  flex items-center justify-center  w-full">
+    <main className="min-h-[70vh] py-32 flex items-center justify-center  w-full">
       {/* Text content with higher z-index */}
       <Container
         style={{ zIndex: 2 }} // Higher than overlay
@@ -48,12 +51,19 @@ function SuccessPage() {
               Successful Payment
             </h2>
             {isSuccess && (
-              <p className="text-sm text-gray-500 mt-2">
+              <p className="text-sm  text-gray-500 mt-2">
                 {isLoggedIn
                   ? "You will be redirected to the dashboard soon… "
                   : "You will be redirected to login soon…"}
               </p>
             )}
+            {/* ---------------------------------------------------------session id shwon -------------------------------------------------- */}
+            <span className="text-xl text-primaryColor font-bold">
+              Session Id :{" "}
+            </span>
+
+            {session_id}
+            {/* ---------------------------------------------------------session id shwon -------------------------------------------------- */}
           </div>
 
           <div className="bg-green-50 text-center py-6">

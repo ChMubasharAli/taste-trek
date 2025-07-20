@@ -1,4 +1,5 @@
 import { BackgroundImage, Container, Overlay } from "@mantine/core";
+import { useLocation } from "react-router-dom";
 
 function FailurePage() {
   //   const navigate = useNavigate();
@@ -9,8 +10,14 @@ function FailurePage() {
 
   //     return () => clearTimeout(timer); // Clean up the timer
   //   });
+
+  const location = useLocation();
+
+  const queryParams = new URLSearchParams(location.search);
+
+  const session_id = queryParams.get("session_id");
   return (
-    <main className="min-h-[70vh]  flex items-center justify-center  w-full">
+    <main className="min-h-[70vh] py-32 flex items-center justify-center  w-full">
       {/* Text content with higher z-index */}
       <Container
         style={{ zIndex: 2 }} // Higher than overlay
@@ -42,6 +49,14 @@ function FailurePage() {
             <h2 className="mt-6 text-xl font-semibold text-gray-800">
               Transection Unsuccessful
             </h2>
+
+            {/* ---------------------------------------------------------session id shwon -------------------------------------------------- */}
+            <span className="text-xl text-primaryColor font-bold">
+              Session Id :{" "}
+            </span>
+
+            {session_id}
+            {/* ---------------------------------------------------------session id shwon -------------------------------------------------- */}
           </div>
 
           <div className="bg-green-50 text-center p-6">

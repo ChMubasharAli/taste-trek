@@ -1,6 +1,10 @@
 "use client";
 
 import { Package, Clock, CheckCircle, Truck } from "lucide-react";
+import useApi from "../hooks/useApi";
+import { useEffect } from "react";
+import { useContext } from "react";
+import { StoreContext } from "../context/StoreContext";
 
 // Mock data for demonstration
 const orders = [
@@ -87,6 +91,20 @@ const getStatusColor = (status) => {
 };
 
 export default function MyOrdersComponent() {
+  const { userData } = useContext(StoreContext);
+  const { data, error, request } = useApi();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await request(
+        `${import.meta.env.VITE_API_URL}/api/getOrders/${userData._id}`
+      );
+    };
+
+    fetchData();
+  }, []);
+
+  console.log("My Orders are : ", data?.data);
   return (
     <section className="container mx-auto py-32 px-4">
       {/* Header */}
