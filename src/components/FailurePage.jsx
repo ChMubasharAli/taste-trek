@@ -1,21 +1,44 @@
-import { BackgroundImage, Container, Overlay } from "@mantine/core";
-import { useLocation } from "react-router-dom";
+import { BackgroundImage, Container, Loader, Overlay } from "@mantine/core";
+import { notifications } from "@mantine/notifications";
+import axios from "axios";
+import { useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 function FailurePage() {
-  //   const navigate = useNavigate();
-  //   useEffect(() => {
-  //     const timer = setTimeout(() => {
-  //       navigate("/owner-plans"); // Redirect to login page after 10 seconds
-  //     }, 5000);
-
-  //     return () => clearTimeout(timer); // Clean up the timer
-  //   });
-
+  const navigate = useNavigate();
   const location = useLocation();
 
   const queryParams = new URLSearchParams(location.search);
 
   const session_id = queryParams.get("session_id");
+
+  useEffect(() => {
+    const paymentSuccess = async () => {
+      notifications.show({
+        title: "Payment Failed",
+        message: "Place your order again...",
+        position: "top-right",
+        autoClose: 7000,
+        color: "red", // Yellow for warning
+        withBorder: true,
+        radius: "md",
+      });
+      try {
+        const response = await axios.get(
+          `${
+            import.meta.env.VITE_API_URL
+          }/api/payment-failure?session_id=${session_id}`
+        );
+
+        if (response.data.success) {
+          navigate("/cart", scrollTo(0, 0));
+        }
+      } catch (error) {
+        console.log("Error Occure while sending the session_id ", error);
+      }
+    };
+    paymentSuccess();
+  }, []);
   return (
     <main className="min-h-[70vh] py-32 flex items-center justify-center  w-full">
       {/* Text content with higher z-index */}
@@ -47,16 +70,13 @@ function FailurePage() {
               </svg>
             </div>
             <h2 className="mt-6 text-xl font-semibold text-gray-800">
-              Transection Unsuccessful
+              Place Your Order Again
             </h2>
 
-            {/* ---------------------------------------------------------session id shwon -------------------------------------------------- */}
-            <span className="text-xl text-primaryColor font-bold">
-              Session Id :{" "}
-            </span>
-
-            {session_id}
-            {/* ---------------------------------------------------------session id shwon -------------------------------------------------- */}
+            <p className="text-sm flex items-center justify-center gap-2  text-gray-500 mt-2">
+              You will be redirected to CART page{" "}
+              <Loader color="red" size={"sm"} type="dots" />
+            </p>
           </div>
 
           <div className="bg-green-50 text-center p-6">
