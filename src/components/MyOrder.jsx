@@ -7,9 +7,6 @@ import { useContext } from "react";
 import { StoreContext } from "../context/StoreContext";
 import { Loader } from "@mantine/core";
 
-// Mock data for demonstration
-const orders = [];
-
 const getStatusIcon = (status) => {
   switch (status.toLowerCase()) {
     case "delivered":
@@ -46,7 +43,7 @@ const getStatusColor = (status) => {
 
 export default function MyOrdersComponent() {
   const { userData } = useContext(StoreContext);
-  const { data, loading, error, request } = useApi();
+  const { data, loading, request } = useApi();
 
   useEffect(() => {
     const fetchData = async () => {
