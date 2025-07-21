@@ -113,9 +113,7 @@ export default function FoodItemCard({ item }) {
     return {
       ...mainItem,
       addOns: [...addons],
-      totalPrice:
-        (mainItem.basePrice || 0) * (mainItem.quantity || 1) + addOnsTotal,
-      price: mainItem.basePrice, // Ensure price is included if needed by your cart system
+      totalPrice: addOnsTotal,
     };
   };
 

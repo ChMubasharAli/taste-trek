@@ -60,7 +60,10 @@ const StoreContextProvider = ({ children }) => {
 
   // find the total sum of the items ammount that user add to the cart
   const totalItemAmmount = cartItems.reduce((accumulator, currentItem) => {
-    return accumulator + currentItem.totalPrice;
+    return (
+      accumulator +
+      (currentItem.totalPrice + currentItem.basePrice * currentItem.quantity)
+    );
   }, 0);
 
   // manine disclousre for open and close login and signup modal
@@ -129,13 +132,24 @@ const StoreContextProvider = ({ children }) => {
   // Function to add an item to the cart
   const addToCart = (item) => {
     setCartItems((prevState) => {
-      if (prevState.some((cartItem) => cartItem._id === item._id)) {
-        return prevState.map((cartItem) =>
-          cartItem._id === item._id
+      // Check if an item with the same ID AND configuration exists
+      const existingItemIndex = prevState.findIndex(
+        (cartItem) =>
+          cartItem._id === item._id &&
+          JSON.stringify(cartItem.selectedItems) ===
+            JSON.stringify(item.selectedItems) &&
+          JSON.stringify(cartItem.addOns) === JSON.stringify(item.addOns)
+      );
+
+      if (existingItemIndex !== -1) {
+        // If identical item exists, increment quantity
+        return prevState.map((cartItem, index) =>
+          index === existingItemIndex
             ? { ...cartItem, quantity: cartItem.quantity + 1 }
             : cartItem
         );
       } else {
+        // Otherwise add as new item
         return [...prevState, { ...item }];
       }
     });

@@ -103,7 +103,7 @@ const Cart = () => {
             {cartItems.length} items in your cart
           </p>
         </div>
-
+        {/* {JSON.stringify(cartItems, null, 2)} */}
         <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
           {/* Cart Items */}
           <div className="flex-1 lg:flex-[2]">
@@ -117,6 +117,7 @@ const Cart = () => {
                 >
                   {/* Mobile Layout */}
                   <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+                    {/* {JSON.stringify(item, null, 2)} */}
                     {/* Image and Basic Info */}
                     <div className="flex items-center gap-4 flex-1">
                       <div className="relative flex-shrink-0">
@@ -174,7 +175,7 @@ const Cart = () => {
                       {/* Item Total */}
                       <div className="text-right">
                         <p className="text-lg sm:text-xl font-bold text-gray-900">
-                          $ {item.totalPrice}
+                          $ {item.totalPrice + item.basePrice * item.quantity}
                         </p>
                       </div>
 
@@ -263,11 +264,8 @@ const Cart = () => {
 
       {/* ---------------also like section-------------  */}
       <section className="flex flex-col gap-8 pb-32">
-        <div>
-          <h1
-            data-aos="fade-up"
-            className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 tracking-wide"
-          >
+        <div data-aos="fade-up">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 tracking-wide">
             You May Also Like
           </h1>
           <div className="w-20 h-1 bg-gradient-to-r from-green-500 to-green-600 rounded-full mb-4"></div>
