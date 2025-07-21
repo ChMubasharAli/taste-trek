@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import { Wallet, CreditCard } from "lucide-react";
 import { Button } from "@mantine/core";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { StoreContext } from "../context/StoreContext";
 import axios from "axios";
 import { notifications } from "@mantine/notifications";
@@ -9,6 +9,7 @@ import { notifications } from "@mantine/notifications";
 export default function PaymentComp() {
   const [selectedMethod, setSelectedMethod] = useState(null);
   const [loading, setLoading] = useState(null);
+  const navigate = useNavigate();
 
   const location = useLocation();
   const {
@@ -19,7 +20,7 @@ export default function PaymentComp() {
     additionalDetail,
   } = location.state || {};
 
-  const { cartItems, userData } = useContext(StoreContext);
+  const { cartItems, userData, clearCart } = useContext(StoreContext);
 
   // Payload for Pickup Order
   const pickupPayload = {
@@ -69,6 +70,8 @@ export default function PaymentComp() {
             withBorder: true,
             radius: "md",
           });
+          clearCart();
+          navigate("/myOrders", scrollTo(0, 0));
         }
       } else {
         const response = await axios.post(
@@ -87,6 +90,8 @@ export default function PaymentComp() {
             withBorder: true,
             radius: "md",
           });
+          clearCart();
+          navigate("/myOrders", scrollTo(0, 0));
         }
       }
     } catch (error) {

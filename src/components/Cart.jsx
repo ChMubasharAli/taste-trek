@@ -104,6 +104,8 @@ const Cart = () => {
           </p>
         </div>
 
+        {JSON.stringify(cartItems, null, 2)}
+
         <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
           {/* Cart Items */}
           <div className="flex-1 lg:flex-[2]">
@@ -174,7 +176,7 @@ const Cart = () => {
                       {/* Item Total */}
                       <div className="text-right">
                         <p className="text-lg sm:text-xl font-bold text-gray-900">
-                          $ {item.basePrice * item.quantity + item.totalPrice}
+                          $ {item.basePrice * item.quantity}
                         </p>
                       </div>
 

@@ -139,7 +139,7 @@ const StoreContextProvider = ({ children }) => {
             : cartItem
         );
       } else {
-        return [...prevState, { ...item, quantity: 1 }];
+        return [...prevState, { ...item }];
       }
     });
   };

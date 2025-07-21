@@ -102,6 +102,7 @@ export default function FoodItemCard({ item }) {
 
   // Prepare item for cart
   const prepareCartItem = () => {
+    console.log("Main Item is ", mainItem);
     return {
       ...mainItem,
       addOns: [...addons],
@@ -252,7 +253,8 @@ export default function FoodItemCard({ item }) {
           </Modal.Header>
           <Modal.Body>
             <section className="">
-              
+              {JSON.stringify(mainItem, null, 2)}
+
               <div className="grid grid-cols-1 md:grid-cols-2  gap-8">
                 {/* Left Section */}
                 <div className="  py-8 rounded-2xl ">
@@ -462,6 +464,12 @@ export default function FoodItemCard({ item }) {
                             message: `${name} has been added to your cart`,
                             color: "green",
                           });
+                          console.log(
+                            "Prepared Cart Item is ",
+                            prepareCartItem()
+                          );
+
+                          console.log("Cart Items Are ", cartItems);
                         }}
                         size="md"
                         variant="filled"
