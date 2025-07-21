@@ -1,7 +1,7 @@
 import { Loader, Text, Title } from "@mantine/core";
 import { StoreContext } from "../../context/StoreContext";
 import FoodItemCard from "./FoodItemCard";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 
 export default function FoodDisplay({ category }) {
   const { foodPackage, loadingPackages, errorPackages } =

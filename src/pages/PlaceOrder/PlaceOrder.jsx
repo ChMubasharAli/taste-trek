@@ -21,7 +21,6 @@ const CheckoutComponent = () => {
     zipcode: "",
     country: "",
     phone: "",
-
     deliveryMethod: "delivery",
   });
 
@@ -33,7 +32,7 @@ const CheckoutComponent = () => {
   const proceedToPayment = () => {
     // Loop through formData to check for empty or spaces-only fields
     for (const field in formData) {
-      if (!formData[field].trim() === "") {
+      if (!formData[field] || formData[field].trim() === "") {
         // Check if the field is empty or only contains spaces
         notifications.show({
           title: "Fields Required",
@@ -46,16 +45,14 @@ const CheckoutComponent = () => {
         });
         return; // Exit early if any field is empty or contains only spaces
       }
-      navigate(
-        "/payment",
-        {
-          state: { formData, additionalDetail },
-        },
-        scrollTo(0, 0)
-      );
     }
-
-    // place order
+    navigate(
+      "/payment",
+      {
+        state: { formData, additionalDetail },
+      },
+      scrollTo(0, 0)
+    );
   };
 
   return (
