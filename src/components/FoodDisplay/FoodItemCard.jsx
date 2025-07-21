@@ -103,10 +103,19 @@ export default function FoodItemCard({ item }) {
   // Prepare item for cart
   const prepareCartItem = () => {
     console.log("Main Item is ", mainItem);
+
+    // Calculate add-ons total including quantities
+    const addOnsTotal = addons.reduce(
+      (total, addon) => total + addon.price * (addon.quantity || 1),
+      0
+    );
+
     return {
       ...mainItem,
       addOns: [...addons],
-      totalPrice: calculateTotalPrice(),
+      totalPrice:
+        (mainItem.basePrice || 0) * (mainItem.quantity || 1) + addOnsTotal,
+      price: mainItem.basePrice, // Ensure price is included if needed by your cart system
     };
   };
 

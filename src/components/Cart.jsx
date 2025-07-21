@@ -174,7 +174,7 @@ const Cart = () => {
                       {/* Item Total */}
                       <div className="text-right">
                         <p className="text-lg sm:text-xl font-bold text-gray-900">
-                          $ {item.basePrice * item.quantity}
+                          $ {item.totalPrice}
                         </p>
                       </div>
 
