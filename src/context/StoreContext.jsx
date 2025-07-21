@@ -60,10 +60,7 @@ const StoreContextProvider = ({ children }) => {
 
   // find the total sum of the items ammount that user add to the cart
   const totalItemAmmount = cartItems.reduce((accumulator, currentItem) => {
-    return (
-      accumulator +
-      (currentItem.basePrice * currentItem?.quantity + currentItem.totalPrice)
-    );
+    return accumulator + currentItem.basePrice * currentItem?.quantity;
   }, 0);
 
   // manine disclousre for open and close login and signup modal
