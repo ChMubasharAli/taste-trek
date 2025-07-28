@@ -34,18 +34,12 @@ const router = createBrowserRouter(
     <Route path="/" element={<App />}>
       <Route index element={<Home />} />
       <Route path="/cart" element={<Cart />} />
-      <Route
-        path="/checkout"
-        element={<PrivateRoute element={<CheckoutComponent />} />}
-      />
+      <Route path="/checkout" element={<CheckoutComponent />} />
       <Route
         path="/myOrders"
         element={<PrivateRoute element={<MyOrders />} />}
       />
-      <Route
-        path="/payment"
-        element={<PrivateRoute element={<PaymentComp />} />}
-      />
+      <Route path="/payment" element={<PaymentComp />} />
       <Route path="/forgetPassword" element={<ForgetPassword />} />
       <Route path="/verifyOtp" element={<VerifyOtp />} />
       <Route path="/order-success" element={<SuccessPage />} />

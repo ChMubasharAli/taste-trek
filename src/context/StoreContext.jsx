@@ -24,6 +24,10 @@ const StoreContext = createContext({
   login: () => {},
   logout: () => {},
   clearCart: () => {},
+
+  deliveryPopupOpened: false,
+  deliveryPopupOpen: () => {},
+  deliveryPopupClose: () => {},
 });
 
 const StoreContextProvider = ({ children }) => {
@@ -68,6 +72,12 @@ const StoreContextProvider = ({ children }) => {
 
   // manine disclousre for open and close login and signup modal
   const [opened, { open, close }] = useDisclosure(false);
+
+  // thsi disclousser will use for to shwow and hide the deliverpopup option when the user will login or go with as a guest user
+  const [
+    deliveryPopupOpened,
+    { open: deliveryPopupOpen, close: deliveryPopupClose },
+  ] = useDisclosure(false);
 
   // Fetch food  packages function
   const fetchPackages = useCallback(async () => {
@@ -230,6 +240,10 @@ const StoreContextProvider = ({ children }) => {
     login,
     logout,
     clearCart,
+
+    deliveryPopupOpened,
+    deliveryPopupOpen,
+    deliveryPopupClose,
   };
 
   // useEffect to store cartItems in localStorage whenever they change

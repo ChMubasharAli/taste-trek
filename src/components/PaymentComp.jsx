@@ -24,7 +24,7 @@ export default function PaymentComp() {
 
   // Payload for Pickup Order
   const pickupPayload = {
-    userId: userData._id,
+    userId: userData?._id,
     packages: cartItems,
     deliveryMethod: deliveryMethod,
     paymentMethod: selectedMethod,
@@ -34,7 +34,7 @@ export default function PaymentComp() {
   };
 
   const deliveryPayload = {
-    userId: userData._id,
+    userId: userData?._id,
     packages: cartItems,
     deliveryMethod: formData?.deliveryMethod,
     paymentMethod: selectedMethod,
@@ -47,6 +47,10 @@ export default function PaymentComp() {
       state: formData?.state,
       zipcode: formData?.zipcode,
       country: formData?.country,
+    },
+    userDetails: {
+      fullName: formData?.firstName + formData?.lastName,
+      email: formData?.email,
     },
   };
 
@@ -94,9 +98,18 @@ export default function PaymentComp() {
           navigate("/myOrders", scrollTo(0, 0));
         }
       }
-    } catch (error) {
+    } catch {
       setLoading(false);
-      console.log(error);
+      notifications.show({
+        title: "Order Failed",
+        message:
+          "Something went wrong. Your order could not be placed. Please try again.",
+        position: "top-right",
+        autoClose: 7000,
+        color: "red", // Red for errors/failures
+        withBorder: true,
+        radius: "md",
+      });
     } finally {
       setLoading(false);
     }
@@ -113,6 +126,8 @@ export default function PaymentComp() {
         </h1>
         <div className="w-20 h-1 bg-gradient-to-r from-green-500 to-green-600 rounded-full mb-4"></div>
       </div>
+
+      {/* {JSON.stringify(formData, null, 2)} */}
 
       <div className=" max-w-3xl mx-auto">
         {/* Payment Cards */}

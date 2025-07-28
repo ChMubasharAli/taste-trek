@@ -8,15 +8,11 @@ import {
   IconTrash,
 } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
-import { useDisclosure } from "@mantine/hooks";
 import { Truck, MapPin, Phone, FileText } from "lucide-react";
 import FoodItemCard from "./FoodDisplay/FoodItemCard";
 import { notifications } from "@mantine/notifications";
 
 const Cart = () => {
-  const [opened, { open: deliveryPopupOpen, close: deliveryPopupClose }] =
-    useDisclosure(false);
-
   const [pickupInfo, setPickupInfo] = useState({
     alternatePhone: "",
     specialInstructions: "",
@@ -33,13 +29,16 @@ const Cart = () => {
     addToCart,
     removeFullItemFromCart,
     totalItemAmmount,
+    deliveryPopupOpened,
+    deliveryPopupClose,
+    deliveryPopupOpen,
   } = useContext(StoreContext);
 
   // fucntion to confirem the delivery method
   const proceedToCheckout = () => {
-    if (!isLoggedIn) {
-      return open();
-    }
+    // if (!isLoggedIn) {
+    //   return open();
+    // }
     deliveryPopupOpen();
   };
 
@@ -286,7 +285,7 @@ const Cart = () => {
       <Modal.Root
         centered
         closeOnClickOutside={false}
-        opened={opened}
+        opened={deliveryPopupOpened}
         onClose={deliveryPopupClose}
         size={visiblePhoneSection ? "md" : "lg"}
       >

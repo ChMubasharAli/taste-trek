@@ -3,10 +3,9 @@ import { ArrowRight } from "lucide-react";
 import flyingBurgerTransparent from "../assets/flyingBurgerTransparent.webp";
 import flyingNoodlesTransparent from "../assets/flyingNoodlesTransparent.webp";
 import flyingVegetablesTransparent from "../assets/flyingVegetablesTransparent.webp";
-import { useContext, useEffect } from "react";
+import { useEffect } from "react";
 import { useState } from "react";
 import { notifications } from "@mantine/notifications";
-import { StoreContext } from "../context/StoreContext";
 import {
   IconHome,
   IconMail,
@@ -14,59 +13,9 @@ import {
   IconToolsKitchen3,
   IconTrendingUp,
 } from "@tabler/icons-react";
-import { useNavigate } from "react-router-dom";
 
 export default function Header() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-
-  const {
-    open: modalOpen,
-    cartItems,
-    isLoggedIn,
-    logout,
-  } = useContext(StoreContext);
-
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    logout();
-    return notifications.show({
-      title: "Logged out",
-      message: "You have successfully logged out. See you next time!",
-      position: "top-right",
-      autoClose: 4000, // Longer autoClose time, as it’s a logout message
-      color: "blue", // You can change the color to blue or any other color that signifies the logout status
-      withBorder: true,
-      radius: "md",
-    });
-  };
-
-  const navigateToCart = () => {
-    if (cartItems.length <= 0 && !isLoggedIn) {
-      modalOpen();
-      return notifications.show({
-        title: "Your Cart is Empty",
-        message: "Please Login to add items to your cart to proceed.",
-        position: "top-right",
-        // autoClose: 1000,
-        color: "red",
-        withBorder: true,
-        radius: "md",
-      });
-    }
-    if (cartItems.length <= 0 && isLoggedIn) {
-      return notifications.show({
-        title: "Your Cart is Empty",
-        message: "Please  add items to your cart to proceed.",
-        position: "top-right",
-        // autoClose: 1000,
-        color: "red",
-        withBorder: true,
-        radius: "md",
-      });
-    }
-    navigate("/cart");
-  };
 
   // Array of food images for the carousel
   const foodImages = [
@@ -74,6 +23,19 @@ export default function Header() {
     flyingNoodlesTransparent,
     flyingVegetablesTransparent,
   ];
+
+  useEffect(() => {
+    notifications.show({
+      title: "Notice",
+      message:
+        "Please Log in to track your orders. You can continue without logging in, but order history won't be available.",
+      position: "bottom-right",
+      autoClose: 10000,
+      color: "red", // Yellow for informational/warning messages
+      withBorder: true,
+      radius: "md",
+    });
+  }, []);
 
   // Auto-rotate images every 3 seconds
   useEffect(() => {
